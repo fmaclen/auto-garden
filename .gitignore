@@ -1,0 +1,18 @@
+# Pocketbase
+/pocketbase/*
+!/pocketbase/LICENSE.md
+!/pocketbase/pb_migrations/
+.pocketbase_pid
+/test/pocketbase
+
+# Python
+__pycache__
+.pytest_cache/
+
+# App & Tests
+.DS_STORE
+/scripts/logs/*.log
+/test/src
+.vscode/Pico-W-Stub
+/dist
+env.py

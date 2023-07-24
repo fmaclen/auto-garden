@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Read the process IDs from the file
+pocketbase_pid=$(head -n 1 scripts/logs/pids.log)
+main_pid=$(sed -n '2p' scripts/logs/pids.log)
+web_pid=$(tail -n 1 scripts/logs/pids.log)
+
+# Kill the processes using the process IDs
+echo "Stopping -> Pocketbase process ID: $pocketbase_pid"
+echo "Stopping -> Main process ID: $main_pid"
+echo "Stopping -> Web server process ID: $web_pid"
+kill "$pocketbase_pid" "$main_pid" "$web_pid"

@@ -1,0 +1,38 @@
+name: Unit tests
+
+on: [pull_request]
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.9
+
+      - name: Download and extract PocketBase
+        env:
+          POCKETBASE_VERSION: 0.16.10
+        run: |
+          wget -O pocketbase.zip https://github.com/pocketbase/pocketbase/releases/download/v${POCKETBASE_VERSION}/pocketbase_${POCKETBASE_VERSION}_linux_amd64.zip
+          unzip pocketbase.zip -d pocketbase
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Set env.py variables
+        run: cp env.sample.py env.py
+
+      - name: Run unit tests
+        env:
+          TEST: true
+          POCKETBASE_SERVER_URL: http://127.0.0.1:8090
+          POCKETBASE_ADMIN_USERNAME: autogarden@example.com
+          POCKETBASE_ADMIN_PASSWORD: computers-that-garden-for-you
+        run: python -m pytest -s -v test/

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>auto-garden - Web UI</title>
+
+    <script type="module">
+      import { Application } from "https://unpkg.com/@hotwired/stimulus/dist/stimulus.js"
+      import BodyController from "./body_controller.js"
+      
+      window.Stimulus = Application.start()
+      Stimulus.register("body", BodyController)
+    </script>
+
+    <style>
+      :root, input { font-family: "SF Mono", monospace; }
+
+      body { 
+        font-size: 14px;
+        background-color: #eaeaea;
+        padding: 8px;
+        row-gap: 16px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .positive { color: rgb(0, 167, 100); }
+      .negative { color: rgb(255, 99, 71); }
+      .in-progress { color: rgb(90, 63, 153); }
+
+      div.pots {
+        display: flex;
+        column-gap: 16px;
+      }
+
+      fieldset.fieldset {
+        width: 100%;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+
+  <body data-controller="body">
+    <div class="pots" data-body-target="pots"></div>
+
+    <form>
+      <fieldset class="fieldset">
+        <legend>PocketBase settings</legend>
+        <strong data-body-target="notice"></strong>
+        <hr/>
+        <div>
+          <label for="server">Server</label>
+          <input data-body-target="serverUrl" type="text" name="server" value="" required />
+        </div>
+        <div>
+          <label for="username">Username</label>
+          <input data-body-target="serverUsername" type="password" name="username" value="" required />
+        </div>
+        <div>
+          <label for="password">Password</label>
+          <input data-body-target="serverPassword" type="password" name="password" value="" required="true" />
+        </div>
+        <hr/>
+        <div>
+          <button data-body-target="serverSubmit" type="button">Apply</button>
+        </div>
+      </fieldset>
+    </form>
+  </body>
+</html>

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# define source and destination directories
+DEVICE=pico_w
+SRC_MAIN_DIR=.
+DEST_DIR=./dist/pico_w
+
+# delete and recreate destination directories
+rm -rf $DEST_DIR
+mkdir -p $DEST_DIR
+mkdir -p $DEST_DIR/lib
+
+# copy main.py (not env.py)
+cp $SRC_MAIN_DIR/main.py $DEST_DIR
+
+# copy library files
+cp $SRC_MAIN_DIR/lib/*.py $DEST_DIR/lib
+
+# copy device specific files
+cp $SRC_MAIN_DIR/devices/$DEVICE/lib/*.py $DEST_DIR/lib
+
+echo ""
+echo "-> Auto-Garden:"
+echo "   Remember to *manually* add —env.py— to the Pico W file system"
+echo ""

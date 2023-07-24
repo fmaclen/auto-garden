@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Run the first command in the background
+nohup ./pocketbase/pocketbase serve --http 0.0.0.0:8090 > scripts/logs/pocketbase.log 2>&1 &
+pocketbase_pid=$!
+disown $pocketbase_pid
+
+# Run the second command in the background
+nohup python main.py > scripts/logs/main.log 2>&1 &
+main_pid=$!
+disown $main_pid
+
+# Run the third command in the background
+nohup python web/web.py > scripts/logs/web.log 2>&1 &
+web_pid=$!
+disown $web_pid
+
+# Print the process IDs for reference
+echo "Starting -> Pocketbase process ID: $pocketbase_pid"
+echo "Starting -> Main process ID: $main_pid"
+echo "Starting -> Web server process ID: $web_pid"
+
+# Save the process IDs to a file
+echo "$pocketbase_pid" > scripts/logs/pids.log
+echo "$main_pid" >> scripts/logs/pids.log
+echo "$web_pid" >> scripts/logs/pids.log
