@@ -198,8 +198,27 @@ class TestPot(unittest.TestCase):
         self.assertEqual(last_irrigation_record["status"], "success")
         self.assertEqual(last_irrigation_record["pumps"], pot.pump_max_attempts)
 
+        # No error and no irrigation needed on first attempt
+        pot = self.new_pot()
+        mock_irrigate.reset_mock()
+        pot.moisture_buffer = [pot.moisture_low] * pot.moisture_low
+        pot.moisture_previous = pot.moisture_low
+        pot.moisture_current = pot.moisture_low + 1
+        pot.irrigation_event = None
+        pot.is_first_irrigation_attempt = True
+
+        pot.try_to_irrigate()
+        mock_irrigate.assert_not_called()
+        self.assertEqual(pot.irrigation_event, None)
+        self.assertEqual(pot.is_first_irrigation_attempt, False)
+
         # Fail at irrigating
-        pot.moisture_current = pot.moisture_low
+        pot = self.new_pot()
+        mock_irrigate.reset_mock()
+        pot.moisture_buffer = [pot.moisture_low] * pot.moisture_low
+        pot.moisture_previous = pot.moisture_low
+        pot.moisture_current = pot.moisture_low - 1
+        pot.is_first_irrigation_attempt = False
         for _ in range(pot.pump_max_attempts + 1):
             pot.try_to_irrigate()
             sleep(pot.pump_frequency_in_s + 0.1)
