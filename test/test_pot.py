@@ -13,6 +13,7 @@ from lib.pot import Pot
 from env import DEVICE
 
 NAME = "Strawberry (Test)"
+MOISTURE_BUFFER_SIZE = 10
 MOISTURE_LOW = 15
 MOISTURE_HIGH = 80
 MOISTURE_SENSOR_DRY = 60000
@@ -133,12 +134,12 @@ class TestPot(unittest.TestCase):
         pot = self.new_pot()
         
         # Test if moisture_buffer is None
-        pot.moisture_buffer = [None] * 10
+        pot.moisture_buffer = [None] * MOISTURE_BUFFER_SIZE
         pot.try_to_irrigate()
         mock_irrigate.assert_not_called()
 
         # Test if moisture_previous is None
-        pot.moisture_buffer = [10] * 10
+        pot.moisture_buffer = [10] * MOISTURE_BUFFER_SIZE
         pot.moisture_previous = None
         pot.try_to_irrigate()
         mock_irrigate.assert_not_called()
@@ -201,7 +202,7 @@ class TestPot(unittest.TestCase):
         # No error and no irrigation needed on first attempt
         pot = self.new_pot()
         mock_irrigate.reset_mock()
-        pot.moisture_buffer = [pot.moisture_low] * pot.moisture_low
+        pot.moisture_buffer = [pot.moisture_low] * MOISTURE_BUFFER_SIZE
         pot.moisture_previous = pot.moisture_low
         pot.moisture_current = pot.moisture_low + 1
         pot.irrigation_event = None
@@ -215,7 +216,7 @@ class TestPot(unittest.TestCase):
         # Fail at irrigating
         pot = self.new_pot()
         mock_irrigate.reset_mock()
-        pot.moisture_buffer = [pot.moisture_low] * pot.moisture_low
+        pot.moisture_buffer = [pot.moisture_low] * MOISTURE_BUFFER_SIZE
         pot.moisture_previous = pot.moisture_low
         pot.moisture_current = pot.moisture_low - 1
         pot.is_first_irrigation_attempt = False
@@ -230,7 +231,7 @@ class TestPot(unittest.TestCase):
         # don't want to irrigate
         pot = self.new_pot()
         mock_irrigate.reset_mock()
-        pot.moisture_buffer = [pot.moisture_low] * pot.moisture_low
+        pot.moisture_buffer = [pot.moisture_low] * MOISTURE_BUFFER_SIZE
         pot.moisture_previous = pot.moisture_low
         pot.moisture_current = pot.moisture_low
         pot.is_first_irrigation_attempt = True
