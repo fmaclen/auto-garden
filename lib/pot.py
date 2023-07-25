@@ -110,8 +110,9 @@ class Pot:
                 print("-> Irrigation started:", self.id, self.name)
                 self.irrigation_event = self.device.pb.create_irrigation(self.id, "in_progress", 1)
                 self.irrigate()
-                self.is_first_irrigation_attempt = False
-                return
+
+            self.is_first_irrigation_attempt = False
+            return
 
         # If the last irrigation was an error, don't try to irrigate again
         if self.irrigation_event["status"] == "error": return

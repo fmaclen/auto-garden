@@ -11,6 +11,7 @@ from env import DEVICE, POCKETBASE_DEVICE_ID
 class Device:
     def __init__(self, tick_rate: int) -> None:
         print("-> Current device:", DEVICE, POCKETBASE_DEVICE_ID)
+        self.name = DEVICE
         self.tick_rate = tick_rate
         self.sleep = sleep
 
