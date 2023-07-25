@@ -10,7 +10,7 @@ testboi = TestBoi()
 
 from main import TICK_RATE_IN_S
 from lib.time_math import TimeMath
-from env import POCKETBASE_DEVICE_ID, WIFI_SSID, WIFI_PASSWORD
+from env import DEVICE, POCKETBASE_DEVICE_ID, WIFI_SSID, WIFI_PASSWORD
 
 class TestDevice(unittest.TestCase):
     @classmethod
@@ -32,13 +32,21 @@ class TestDevice(unittest.TestCase):
         testboi.pocketbase_stop()
 
     def test_device_as_test(self):
+        DEVICE_TEST = "Greenhouse (Test)"
+
         from lib.device import Device as DeviceTest
         device = DeviceTest(TICK_RATE_IN_S)
+        self.assertEqual(device.name, DEVICE_TEST)
+        self.assertEqual(device.tick_rate, TICK_RATE_IN_S)
+        self.assertEqual(device.id, POCKETBASE_DEVICE_ID)
         self.assertEqual(device.get_current_time() > 0, True)
 
     def test_device_in_pi_4(self):
         from devices.pi_4.lib.device import Device as DevicePi4
         device = DevicePi4(TICK_RATE_IN_S)
+        self.assertEqual(device.name, DEVICE)
+        self.assertEqual(device.tick_rate, TICK_RATE_IN_S)
+        self.assertEqual(device.id, POCKETBASE_DEVICE_ID)
         self.assertEqual(device.get_current_time() > 0, True)
 
     @patch.object(time, 'mktime', return_value=int(datetime.now(utc).timestamp()))
@@ -59,7 +67,9 @@ class TestDevice(unittest.TestCase):
         device = DevicePicoW(TICK_RATE_IN_S)
         
         # Test __init__ method
+        self.assertEqual(device.name, DEVICE)
         self.assertEqual(device.tick_rate, TICK_RATE_IN_S)
+        self.assertEqual(device.id, POCKETBASE_DEVICE_ID)
         
         # Test connect_to_wifi method
         self.network_mock.WLAN.assert_called_once()
