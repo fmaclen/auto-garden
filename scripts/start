@@ -6,7 +6,7 @@ pocketbase_pid=$!
 disown $pocketbase_pid
 
 # Run the second command in the background
-nohup python main.py > scripts/logs/main.log 2>&1 &
+nohup python dist/pi_4/main.py > scripts/logs/main.log 2>&1 &
 main_pid=$!
 disown $main_pid
 
