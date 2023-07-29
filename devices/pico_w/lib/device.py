@@ -6,7 +6,7 @@ from machine import RTC, Pin
 from lib.pocketbase import PocketBase
 from lib.time_math import TimeMath
 
-from env import DEVICE, POCKETBASE_DEVICE_ID, WIFI_SSID, WIFI_PASSWORD
+from env import TEST_ENV, DEVICE, POCKETBASE_DEVICE_ID, WIFI_SSID, WIFI_PASSWORD
 
 
 class Device:
@@ -67,6 +67,6 @@ class Device:
             Pin("LED", Pin.OUT).toggle()
 
             # Only run the loop once in tests
-            if self.name == "Greenhouse (Test)": break
+            if TEST_ENV == True: break
 
             sleep(1)

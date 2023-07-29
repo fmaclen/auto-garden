@@ -3,6 +3,7 @@ except: pass
 
 from lib.pot import Pot
 from lib.device import Device
+from env import TEST_ENV
 
 TICK_RATE_IN_S = 2
 
@@ -24,7 +25,7 @@ class AutoGarden:
                     pot.update()
 
                 # Only run the loop once in tests
-                if self.device.name == "Greenhouse (Test)": break
+                if TEST_ENV == True: break
 
                 self.device.sleep(TICK_RATE_IN_S)
 

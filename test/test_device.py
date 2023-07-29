@@ -10,7 +10,7 @@ testboi = TestBoi()
 
 from main import TICK_RATE_IN_S
 from lib.time_math import TimeMath
-from env import DEVICE, POCKETBASE_DEVICE_ID, WIFI_SSID, WIFI_PASSWORD
+from env import TEST_ENV, DEVICE, POCKETBASE_DEVICE_ID, WIFI_SSID, WIFI_PASSWORD
 
 class TestDevice(unittest.TestCase):
     @classmethod
@@ -32,11 +32,9 @@ class TestDevice(unittest.TestCase):
         testboi.pocketbase_stop()
 
     def test_device_as_test(self):
-        DEVICE_TEST = "Greenhouse (Test)"
-
         from lib.device import Device as DeviceTest
         device = DeviceTest(TICK_RATE_IN_S)
-        self.assertEqual(device.name, DEVICE_TEST)
+        self.assertEqual(TEST_ENV, True)
         self.assertEqual(device.tick_rate, TICK_RATE_IN_S)
         self.assertEqual(device.id, POCKETBASE_DEVICE_ID)
         self.assertEqual(device.get_current_time() > 0, True)
