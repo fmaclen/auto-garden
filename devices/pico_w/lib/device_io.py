@@ -13,3 +13,6 @@ class DeviceIO:
 
     def cleanup(self) -> None:
         self.pump_relay.value(0)
+
+    def led_on(self) -> None:
+        Pin(0, Pin.OUT).value(1)

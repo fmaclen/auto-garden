@@ -49,10 +49,12 @@ class TestDevice(unittest.TestCase):
         self.assertEqual(device.id, POCKETBASE_DEVICE_ID)
         self.assertEqual(device.get_current_time() > 0, True)
 
+    @patch('machine.Pin', autospec=True)
+    @patch('machine.Pin.OUT', autospec=True)
     @patch.object(time, 'mktime', return_value=int(datetime.now(utc).timestamp()))
     @patch.object(time, 'gmtime', return_value=(2023, 1, 2, 3, 4, 5, 6, 7, 8))
     @patch.object(TimeMath, 'datetime_str_to_tuple', return_value=(2023, 1, 2, 3, 4, 5, 6, 7))
-    def test_device_in_pico_w(self, datetime_str_to_tuple_mock, gmtime_mock, mktime_mock):
+    def test_device_in_pico_w(self, datetime_str_to_tuple_mock, gmtime_mock, mktime_mock, _pin_out_mock, pin_mock):
         from devices.pico_w.lib.device import Device as DevicePicoW
 
         wlan_mock = MagicMock()
@@ -100,6 +102,12 @@ class TestDevice(unittest.TestCase):
         self.assertEqual(isinstance(current_time, int), True)
         gmtime_mock.assert_called_once()
         mktime_mock.assert_called_once()
+
+        # Test handle_system_error method
+        device.handle_system_error("A random error occurred")
+        self.assertEqual(pin_mock.call_args[0][0], 'LED')
+        self.assertEqual(pin_mock.call_args[0][1], pin_mock.OUT)
+        pin_mock.return_value.toggle.assert_called_once()
 
 if __name__ == '__main__':
     unittest.main()

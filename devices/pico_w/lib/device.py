@@ -1,7 +1,7 @@
 import network
 from time import sleep, mktime, gmtime
 from urequests import get, post, patch
-from machine import RTC
+from machine import RTC, Pin
 
 from lib.pocketbase import PocketBase
 from lib.time_math import TimeMath
@@ -59,3 +59,14 @@ class Device:
         # Convert GMT tuple to timestamp
         timestamp = mktime(gmtime())
         return int(timestamp)
+
+    def handle_system_error(self, error: str) -> None:
+        print("-> Error:", error)
+        # Turn on the onboard LED to indicate an error
+        while True:
+            Pin("LED", Pin.OUT).toggle()
+
+            # Only run the loop once in tests
+            if self.name == "Greenhouse (Test)": break
+
+            sleep(1)

@@ -9,10 +9,13 @@ TICK_RATE_IN_S = 2
 
 class AutoGarden:
     def __init__(self) -> None:
-        print("-> Starting AutoGarden")
-        self.device = Device(TICK_RATE_IN_S)
-        self.pots = self.setup_pots()
-        self.loop()
+        try:
+            print("-> Starting AutoGarden")
+            self.device = Device(TICK_RATE_IN_S)
+            self.pots = self.setup_pots()
+            self.loop()
+        except Exception as e:
+            self.device.handle_system_error(str(e))
 
     def loop(self) -> None:
         try:
