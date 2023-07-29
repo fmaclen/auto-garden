@@ -60,15 +60,15 @@ class TestDeviceIO(unittest.TestCase):
         self.assertEqual(device_io.gpio.output.call_count, 1)
         self.assertEqual(device_io.pump_relay_pin, self.pump_relay_pin)
 
-        device_io.gpio.output.return_value = device_io.gpio.HIGH
+        device_io.gpio.input.return_value = False
         self.assertEqual(device_io.toggle_pump() == None, True)
-        self.assertEqual(device_io.gpio.output.call_count, 3)
-        self.assertEqual(device_io.gpio.output.call_args_list[2][0][1], device_io.gpio.LOW)
+        self.assertEqual(device_io.gpio.output.call_count, 2)
+        self.assertEqual(device_io.gpio.output.call_args_list[1][0][1], True)
 
-        device_io.gpio.output.return_value = device_io.gpio.LOW
+        device_io.gpio.input.return_value = True
         device_io.toggle_pump()
-        self.assertEqual(device_io.gpio.output.call_count, 5)
-        self.assertEqual(device_io.gpio.output.call_args_list[4][0][1], device_io.gpio.HIGH)
+        self.assertEqual(device_io.gpio.output.call_count, 3)
+        self.assertEqual(device_io.gpio.output.call_args_list[2][0][1], False)
 
         self.assertEqual(device_io.cleanup() == None, True)
         self.assertEqual(device_io.gpio.cleanup.call_count, 1)
