@@ -22,10 +22,7 @@ class DeviceIO:
         return self.channel.value
 
     def toggle_pump(self) -> None:
-        if self.gpio.output(self.pump_relay_pin) == self.gpio.HIGH:
-            self.gpio.output(self.pump_relay_pin, self.gpio.LOW)
-        else:
-            self.gpio.output(self.pump_relay_pin, self.gpio.HIGH)
+        self.gpio.output(self.pump_relay_pin, not self.gpio.input(self.pump_relay_pin))
 
     def cleanup(self) -> None:
         self.gpio.cleanup()
