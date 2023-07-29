@@ -3,16 +3,20 @@ except: pass
 
 from lib.pot import Pot
 from lib.device import Device
+from env import TEST_ENV
 
 TICK_RATE_IN_S = 2
 
 
 class AutoGarden:
     def __init__(self) -> None:
-        print("-> Starting AutoGarden")
-        self.device = Device(TICK_RATE_IN_S)
-        self.pots = self.setup_pots()
-        self.loop()
+        try:
+            print("-> Starting AutoGarden")
+            self.device = Device(TICK_RATE_IN_S)
+            self.pots = self.setup_pots()
+            self.loop()
+        except Exception as e:
+            self.device.handle_system_error(str(e))
 
     def loop(self) -> None:
         try:
@@ -21,7 +25,7 @@ class AutoGarden:
                     pot.update()
 
                 # Only run the loop once in tests
-                if self.device.name == "Greenhouse (Test)": break
+                if TEST_ENV == True: break
 
                 self.device.sleep(TICK_RATE_IN_S)
 

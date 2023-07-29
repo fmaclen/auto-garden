@@ -1,12 +1,12 @@
 import network
 from time import sleep, mktime, gmtime
 from urequests import get, post, patch
-from machine import RTC
+from machine import RTC, Pin
 
 from lib.pocketbase import PocketBase
 from lib.time_math import TimeMath
 
-from env import DEVICE, POCKETBASE_DEVICE_ID, WIFI_SSID, WIFI_PASSWORD
+from env import TEST_ENV, DEVICE, POCKETBASE_DEVICE_ID, WIFI_SSID, WIFI_PASSWORD
 
 
 class Device:
@@ -59,3 +59,14 @@ class Device:
         # Convert GMT tuple to timestamp
         timestamp = mktime(gmtime())
         return int(timestamp)
+
+    def handle_system_error(self, error: str) -> None:
+        print("-> Error:", error)
+        # Turn on the onboard LED to indicate an error
+        while True:
+            Pin("LED", Pin.OUT).toggle()
+
+            # Only run the loop once in tests
+            if TEST_ENV == True: break
+
+            sleep(1)

@@ -21,3 +21,6 @@ class Device:
     def get_current_time(self) -> int:
         return int(datetime.now(utc).timestamp())
 
+    def handle_system_error(self, error: str) -> None:
+        print("-> Error:", error)
+

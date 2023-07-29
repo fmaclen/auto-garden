@@ -27,11 +27,10 @@ class TestMain(unittest.TestCase):
         mock_setup_pots.assert_called_once()
         mock_loop.assert_called_once()
 
-    def test_no_pots(self):
-        try:
-            self.auto_garden = AutoGarden()
-        except Exception as e:
-            self.assertEqual("No pots to irrigate", str(e))
+    @patch.object(Device, "handle_system_error")
+    def test_no_pots(self, mock_handle_system_error):
+        self.auto_garden = AutoGarden()
+        mock_handle_system_error.assert_called_once_with("No pots to irrigate")
 
     @patch.object(AutoGarden, "setup_pots")
     def test_irrigation_loop(self, mock_setup_pots):
