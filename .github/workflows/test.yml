@@ -27,7 +27,9 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Set env.py variables
-        run: cp env.sample.py env.py
+        run: |
+          cp env.sample.py env.py
+          sed -i.bak 's/TEST_ENV = False/TEST_ENV = True/' env.py
 
       - name: Run unit tests
         env:
