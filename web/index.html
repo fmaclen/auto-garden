@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" sizes="512x512" href="images/favicon.png">
+    
     <title>auto-garden - Web UI</title>
 
     <script type="module">
@@ -20,9 +22,12 @@
         font-size: 14px;
         background-color: #eaeaea;
         padding: 8px;
-        row-gap: 16px;
-        display: flex;
-        flex-direction: column;
+        row-gap: 8px;
+        min-height: 100vh;
+        box-sizing: border-box;
+        margin: unset;
+        display: grid;
+        grid-template-rows: auto max-content;
       }
 
       .positive { color: rgb(0, 167, 100); }
@@ -37,6 +42,31 @@
       fieldset.fieldset {
         width: 100%;
         box-sizing: border-box;
+        padding-block: 8px;
+        border-radius: 4px;
+        border: 1px solid #888;
+        box-shadow: 1px 0 #fff;
+      }
+
+      nav.status {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        column-gap: 16px;
+      }
+
+      dl {
+        margin-block: unset;
+      }
+
+      form.form {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        column-gap: 16px;
+        row-gap: 8px;
+      }
+
+      label.form__label {
+        font-weight: 600;
       }
     </style>
   </head>
@@ -44,28 +74,32 @@
   <body data-controller="body">
     <div class="pots" data-body-target="pots"></div>
 
-    <form>
+    <nav class="status">
+      <fieldset class="fieldset">
+        <legend>auto-garden / <a href="https://github.com/fmaclen/auto-garden" target="_blank">Repository</a> / <a href="https://github.com/fmaclen/auto-garden/pulls" target="_blank">Pull requests</a></legend>
+        <dl>
+          <dt><strong>Status</strong></dt>
+          <dd data-body-target="notice"></dd>
+          <hr/>
+          <dt><strong>Current time</strong></dt>
+          <dd data-body-target="serverTime">—</dd>
+        </dl>
+      </fieldset>
+
       <fieldset class="fieldset">
         <legend>PocketBase settings</legend>
-        <strong data-body-target="notice"></strong>
-        <hr/>
-        <div>
-          <label for="server">Server</label>
-          <input data-body-target="serverUrl" type="text" name="server" value="" required />
-        </div>
-        <div>
-          <label for="username">Username</label>
-          <input data-body-target="serverUsername" type="password" name="username" value="" required />
-        </div>
-        <div>
-          <label for="password">Password</label>
-          <input data-body-target="serverPassword" type="password" name="password" value="" required="true" />
-        </div>
-        <hr/>
-        <div>
-          <button data-body-target="serverSubmit" type="button">Apply</button>
-        </div>
+        <form class="form">
+            <label class="form__label" for="server">Server</label>
+            <input data-body-target="serverUrl" type="text" name="server" value="" required />
+
+            <label class="form__label" for="username">Username</label>
+            <input data-body-target="serverUsername" type="password" name="username" value="" required />
+
+            <label class="form__label" for="password">Password</label>
+            <input data-body-target="serverPassword" type="password" name="password" value="" required="true" />
+            <button data-body-target="serverSubmit" type="button">Apply</button>
+        </form>
       </fieldset>
-    </form>
+    </nav>
   </body>
 </html>

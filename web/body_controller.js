@@ -22,6 +22,7 @@ export default class BodyController extends Controller {
     "serverUsername",
     "serverPassword",
     "serverSubmit",
+    "serverTime"
   ];
 
   async connect() {
@@ -30,6 +31,8 @@ export default class BodyController extends Controller {
       "click",
       async () => await this.setServerConfig()
     );
+
+    this.loopId = setInterval(() => this.loop(), 1000);
   }
 
   async update() {
@@ -59,13 +62,7 @@ export default class BodyController extends Controller {
             backgroundColor: "rgb(75, 192, 192)",
             borderColor: "rgb(75, 192, 192)",
             data: moistures.items.map((moisture) => moisture.level),
-          },
-          {
-            label: "Irrigation pumps",
-            backgroundColor: "rgb(255, 99, 132)",
-            borderColor: "rgb(255, 99, 132)",
-            data: irrigations.items.map((irrigation) => irrigation.pumps),
-          },
+          }
         ],
       };
 
@@ -123,21 +120,13 @@ export default class BodyController extends Controller {
       const lastestMoisture = moistures.items[moistures.items.length - 1]; // prettier-ignore
       this.potNameTargets[index].textContent = lastestMoisture.expand.pot.name; // prettier-ignore
       this.potMoistureLevelTargets[index].textContent = `${lastestMoisture.level}%`; // prettier-ignore
-      this.potMoistureUpdatedTargets[index].textContent = formatDistance(
-        new Date(lastestMoisture.updated),
-        new Date(),
-        { addSuffix: true }
-      );
-
+      this.potMoistureUpdatedTargets[index].setAttribute("datetime", new Date(lastestMoisture.updated).toISOString())
+      
       const lastestIrrigation = irrigations.items[irrigations.items.length - 1]; // prettier-ignore
       if (lastestIrrigation) {
-        this.potIrrigationStatusTargets[index].textContent = lastestIrrigation.status; // prettier-ignore
-        this.potIrrigationPumpsTargets[index].textContent = lastestIrrigation.pumps; // prettier-ignore
-        this.potIrrigationUpdatedTargets[index].textContent = formatDistance(
-          new Date(lastestIrrigation.updated),
-          new Date(),
-          { addSuffix: true }
-        );
+        this.potIrrigationStatusTargets[index].textContent = `${lastestIrrigation.status} /`; // prettier-ignore
+        this.potIrrigationPumpsTargets[index].textContent = `${lastestIrrigation.pumps} pumps`; // prettier-ignore
+        this.potIrrigationUpdatedTargets[index].setAttribute("datetime", new Date(lastestIrrigation.updated).toISOString())
       } else {
         this.potIrrigationStatusTargets[index].textContent = "Never irrigated";
       }
@@ -230,10 +219,40 @@ export default class BodyController extends Controller {
   removePotTemplates() {
     this.potsTarget.innerHTML = "";
   }
+  
+  loop() {
+    this.serverTimeTarget.textContent = new Date().toLocaleString("en-US", {
+      timeZone: "UTC",
+      dateStyle: "full",
+      timeStyle: "long",
+    });
+
+    [
+      ...this.potMoistureUpdatedTargets,
+      ...this.potIrrigationUpdatedTargets
+    ].forEach((target) => {
+      const lastUpdated = target.getAttribute("datetime");
+
+      if(lastUpdated) {
+        target.textContent = formatDistance(
+          new Date(lastUpdated),
+          new Date(),
+          { addSuffix: true }
+        );
+      }
+    });
+
+    this.serverTimeTarget.textContent = new Date().toLocaleString("en-US", {
+      timeZone: "UTC",
+      dateStyle: "full",
+      timeStyle: "long",
+    });
+  }
 
   async disconnect() {
     await this.pb.collection("moistures").unsubscribe();
     await this.pb.collection("irrigations").unsubscribe();
     this.removePotTemplates();
+    clearInterval(this.loopId);
   }
 }

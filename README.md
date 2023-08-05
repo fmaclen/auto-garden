@@ -1,5 +1,7 @@
 # auto-garden
 
+<p align="center"><img src="https://github.com/fmaclen/auto-garden/assets/1434675/8fc50981-174d-44af-89ae-b72e054ac3e9" width="192"/></p>
+
 A self-learning project to get familiar with Python, electronics and gardening.
 
 ### Features
@@ -10,7 +12,7 @@ A self-learning project to get familiar with Python, electronics and gardening.
 
 _As you can see, the web UI is very much a work in progress..._
 
-![image](https://github.com/fmaclen/auto-garden/assets/1434675/c609872c-84b3-400e-bbe6-70eb5249782a)
+![image](https://github.com/fmaclen/auto-garden/assets/1434675/397e276b-944f-43bf-91d3-a9af1aa16879)
 
 The app relies on a database for the configuration of the **`plant pots`** you want to irrigate and the **`devices`** these `pots` are connected to. You can define all the settings for each pot (see table below) to determine when to irrigate and for how long. Every time the moisture reading changes it's automatically saved to the database.
 
