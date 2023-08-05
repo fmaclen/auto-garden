@@ -120,21 +120,13 @@ export default class BodyController extends Controller {
       const lastestMoisture = moistures.items[moistures.items.length - 1]; // prettier-ignore
       this.potNameTargets[index].textContent = lastestMoisture.expand.pot.name; // prettier-ignore
       this.potMoistureLevelTargets[index].textContent = `${lastestMoisture.level}%`; // prettier-ignore
-      this.potMoistureUpdatedTargets[index].textContent = formatDistance(
-        new Date(lastestMoisture.updated),
-        new Date(),
-        { addSuffix: true }
-      );
-
+      this.potMoistureUpdatedTargets[index].setAttribute("datetime", new Date(lastestMoisture.updated).toISOString())
+      
       const lastestIrrigation = irrigations.items[irrigations.items.length - 1]; // prettier-ignore
       if (lastestIrrigation) {
         this.potIrrigationStatusTargets[index].textContent = `${lastestIrrigation.status} /`; // prettier-ignore
         this.potIrrigationPumpsTargets[index].textContent = `${lastestIrrigation.pumps} pumps`; // prettier-ignore
-        this.potIrrigationUpdatedTargets[index].textContent = formatDistance(
-          new Date(lastestIrrigation.updated),
-          new Date(),
-          { addSuffix: true }
-        );
+        this.potIrrigationUpdatedTargets[index].setAttribute("datetime", new Date(lastestIrrigation.updated).toISOString())
       } else {
         this.potIrrigationStatusTargets[index].textContent = "Never irrigated";
       }
@@ -229,6 +221,27 @@ export default class BodyController extends Controller {
   }
   
   loop() {
+    this.serverTimeTarget.textContent = new Date().toLocaleString("en-US", {
+      timeZone: "UTC",
+      dateStyle: "full",
+      timeStyle: "long",
+    });
+
+    [
+      ...this.potMoistureUpdatedTargets,
+      ...this.potIrrigationUpdatedTargets
+    ].forEach((target) => {
+      const lastUpdated = target.getAttribute("datetime");
+
+      if(lastUpdated) {
+        target.textContent = formatDistance(
+          new Date(lastUpdated),
+          new Date(),
+          { addSuffix: true }
+        );
+      }
+    });
+
     this.serverTimeTarget.textContent = new Date().toLocaleString("en-US", {
       timeZone: "UTC",
       dateStyle: "full",
