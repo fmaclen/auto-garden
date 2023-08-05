@@ -22,6 +22,7 @@ export default class BodyController extends Controller {
     "serverUsername",
     "serverPassword",
     "serverSubmit",
+    "serverTime"
   ];
 
   async connect() {
@@ -30,6 +31,8 @@ export default class BodyController extends Controller {
       "click",
       async () => await this.setServerConfig()
     );
+
+    this.loopId = setInterval(() => this.loop(), 1000);
   }
 
   async update() {
@@ -224,10 +227,20 @@ export default class BodyController extends Controller {
   removePotTemplates() {
     this.potsTarget.innerHTML = "";
   }
+  
+  loop() {
+    // return UTC date including day, month, year, hours, minutes, seconds
+    this.serverTimeTarget.textContent = new Date().toLocaleString("en-US", {
+      timeZone: "UTC",
+      dateStyle: "full",
+      timeStyle: "long",
+    });
+  }
 
   async disconnect() {
     await this.pb.collection("moistures").unsubscribe();
     await this.pb.collection("irrigations").unsubscribe();
     this.removePotTemplates();
+    clearInterval(this.loopId);
   }
 }
