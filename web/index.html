@@ -57,6 +57,17 @@
       dl {
         margin-block: unset;
       }
+
+      form.form {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        column-gap: 16px;
+        row-gap: 8px;
+      }
+
+      label.form__label {
+        font-weight: 600;
+      }
     </style>
   </head>
 
@@ -65,7 +76,7 @@
 
     <nav class="status">
       <fieldset class="fieldset">
-        <legend>Server</legend>
+        <legend>auto-garden / <a href="https://github.com/fmaclen/auto-garden" target="_blank">Repository</a> / <a href="https://github.com/fmaclen/auto-garden/pulls" target="_blank">Pull requests</a></legend>
         <dl>
           <dt><strong>Status</strong></dt>
           <dd data-body-target="notice"></dd>
@@ -77,23 +88,16 @@
 
       <fieldset class="fieldset">
         <legend>PocketBase settings</legend>
-        <form>
-            <div>
-              <label for="server">Server</label>
+        <form class="form">
+            <label class="form__label" for="server">Server</label>
             <input data-body-target="serverUrl" type="text" name="server" value="" required />
-          </div>
-          <div>
-            <label for="username">Username</label>
+
+            <label class="form__label" for="username">Username</label>
             <input data-body-target="serverUsername" type="password" name="username" value="" required />
-          </div>
-          <div>
-            <label for="password">Password</label>
+
+            <label class="form__label" for="password">Password</label>
             <input data-body-target="serverPassword" type="password" name="password" value="" required="true" />
-          </div>
-          <hr/>
-          <div>
             <button data-body-target="serverSubmit" type="button">Apply</button>
-          </div>
         </form>
       </fieldset>
     </nav>
