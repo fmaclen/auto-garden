@@ -2,7 +2,7 @@
     "python.linting.enabled": true,
     "python.languageServer": "Pylance",
     "python.analysis.typeCheckingMode": "basic",
-    "picowgo.syncFolder": "dist/pico_w",
+    "micropico.syncFolder": "dist/pico_w",
     "python.analysis.typeshedPaths": [
         ".vscode/Pico-W-Stub"
     ],

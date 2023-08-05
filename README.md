@@ -103,7 +103,7 @@ Stop the server and app:
 1. Clone the repo: `git clone https://github.com/fmaclen/auto-garden.git` and `cd auto-garden`
 2. Build the app with: `./script/build/pico_w`. This will generate `/dist/pico_w` folder with all the files.
 3. Create a copy of `env.sample.py` and rename it to `dist/pico_w/env.py`. Update the file with the correct values.
-4. Copy the contents of the `dist/pico_w` folder to the Pico W's filesystem. If you are using **VSCode** I'd recommend using the [Pico-W-Go](https://github.com/paulober/Pico-W-Go/) extension, otherwise use [Thonny](https://thonny.org/).
+4. Copy the contents of the `dist/pico_w` folder to the Pico W's filesystem. If you are using **VSCode** I'd recommend using the [MicroPico](https://github.com/paulober/MicroPico/) extension, otherwise use [Thonny](https://thonny.org/).
 5. Unplug from your computer and connect it to a power source. It should connect to the WiFi network set in `env.py` and start running the app. You can check if it's running by looking at the logged events in **PocketBase** or seeing the moisture readings in the **Web UI**.
 
 ---
