@@ -59,13 +59,7 @@ export default class BodyController extends Controller {
             backgroundColor: "rgb(75, 192, 192)",
             borderColor: "rgb(75, 192, 192)",
             data: moistures.items.map((moisture) => moisture.level),
-          },
-          {
-            label: "Irrigation pumps",
-            backgroundColor: "rgb(255, 99, 132)",
-            borderColor: "rgb(255, 99, 132)",
-            data: irrigations.items.map((irrigation) => irrigation.pumps),
-          },
+          }
         ],
       };
 
