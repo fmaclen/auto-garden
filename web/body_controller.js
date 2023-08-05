@@ -128,8 +128,8 @@ export default class BodyController extends Controller {
 
       const lastestIrrigation = irrigations.items[irrigations.items.length - 1]; // prettier-ignore
       if (lastestIrrigation) {
-        this.potIrrigationStatusTargets[index].textContent = lastestIrrigation.status; // prettier-ignore
-        this.potIrrigationPumpsTargets[index].textContent = lastestIrrigation.pumps; // prettier-ignore
+        this.potIrrigationStatusTargets[index].textContent = `${lastestIrrigation.status} /`; // prettier-ignore
+        this.potIrrigationPumpsTargets[index].textContent = `${lastestIrrigation.pumps} pumps`; // prettier-ignore
         this.potIrrigationUpdatedTargets[index].textContent = formatDistance(
           new Date(lastestIrrigation.updated),
           new Date(),
@@ -229,7 +229,6 @@ export default class BodyController extends Controller {
   }
   
   loop() {
-    // return UTC date including day, month, year, hours, minutes, seconds
     this.serverTimeTarget.textContent = new Date().toLocaleString("en-US", {
       timeZone: "UTC",
       dateStyle: "full",
