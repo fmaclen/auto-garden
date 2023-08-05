@@ -1,6 +1,6 @@
 # auto-garden
 
-![favicon](https://github.com/fmaclen/auto-garden/assets/1434675/8fc50981-174d-44af-89ae-b72e054ac3e9)
+<p align="center"><img src="https://github.com/fmaclen/auto-garden/assets/1434675/8fc50981-174d-44af-89ae-b72e054ac3e9" width="192"/></p>
 
 A self-learning project to get familiar with Python, electronics and gardening.
 
