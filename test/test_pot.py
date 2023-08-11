@@ -101,9 +101,22 @@ class TestPot(unittest.TestCase):
         self.assertNotEqual(pot.moisture_current, 0)
 
         # Simulating an exception scenario
-        mock_read_moisture_sensor.return_value = pot.moisture_sensor_wet - 1000
+        mock_read_moisture_sensor.return_value = None
         with self.assertRaises(Exception):
             pot.read_moisture()
+
+        # Check that moisture readings out of range are ignored
+        mock_get_moisture_percentage = MagicMock()
+        pot.get_moisture_percentage = mock_get_moisture_percentage
+
+        mock_read_moisture_sensor.return_value = pot.moisture_sensor_wet - 1
+        pot.read_moisture()
+        mock_get_moisture_percentage.assert_not_called()
+
+        mock_read_moisture_sensor.return_value = pot.moisture_sensor_dry + 1
+        pot.read_moisture()
+        mock_get_moisture_percentage.assert_not_called()
+        
 
     def test_get_moisture_percentage(self):
         pot = self.new_pot()
