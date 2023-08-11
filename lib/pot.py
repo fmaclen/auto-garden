@@ -57,7 +57,7 @@ class Pot:
         raw_value = self.device_io.read_moisture_sensor() # Read the raw value from the sensor
 
         # Ensure that the moisture level has been read
-        if not isinstance(raw_value, (int, float)) or raw_value < self.moisture_sensor_wet or raw_value > self.moisture_sensor_dry:
+        if not isinstance(raw_value, (int, float)):
             raise Exception("Could not read moisture level correctly")
 
         # Add the new reading to the list and calculate the moving average
@@ -71,7 +71,7 @@ class Pot:
             # Save the reading
             if self.moisture_current is not None and self.moisture_previous != self.moisture_current:
                 self.set_moisture(self.moisture_current)
-    
+
     # Calculate moisture percentage, from dry (0%) to wet (100%)
     def get_moisture_percentage(self, raw_value: int) -> int:
         # Clip the raw_value to the defined min and max values
