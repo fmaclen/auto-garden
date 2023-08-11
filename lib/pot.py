@@ -60,6 +60,10 @@ class Pot:
         if not isinstance(raw_value, (int, float)):
             raise Exception("Could not read moisture level correctly")
 
+        # Skip the moisture level reading if it's out of range
+        if raw_value < self.moisture_sensor_wet: return
+        if raw_value > self.moisture_sensor_dry: return
+
         # Add the new reading to the list and calculate the moving average
         new_moisture = self.get_moisture_percentage(raw_value)
         self.moisture_buffer.append(new_moisture)
