@@ -17,6 +17,7 @@ export default class BodyController extends Controller {
     "potIrrigationPumps",
     "potIrrigationUpdated",
     "potLineChart",
+    "potId",
     "notice",
     "serverUrl",
     "serverUsername",
@@ -121,6 +122,8 @@ export default class BodyController extends Controller {
       this.potNameTargets[index].textContent = lastestMoisture.expand.pot.name; // prettier-ignore
       this.potMoistureLevelTargets[index].textContent = `${lastestMoisture.level}%`; // prettier-ignore
       this.potMoistureUpdatedTargets[index].setAttribute("datetime", new Date(lastestMoisture.updated).toISOString())
+      this.potIdTargets[index].setAttribute("data-pot-id", lastestMoisture.expand.pot.id);
+      this.potIdTargets[index].setAttribute("data-device-ip", pot.expand.device.ip);
       
       const lastestIrrigation = irrigations.items[irrigations.items.length - 1]; // prettier-ignore
       if (lastestIrrigation) {
@@ -203,7 +206,7 @@ export default class BodyController extends Controller {
   }
 
   async getPots() {
-    return await this.pb.collection("pots").getList(1, 500);
+    return await this.pb.collection("pots").getList(1, 500, { expand: "device" });
   }
 
   async setPotTemplate() {
@@ -247,6 +250,20 @@ export default class BodyController extends Controller {
       dateStyle: "full",
       timeStyle: "long",
     });
+  }
+
+  irrigate(e) {
+    const potId = e.currentTarget.getAttribute("data-pot-id")
+    const url = `http://${e.currentTarget.getAttribute("data-device-ip")}:9999`
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${this.pb.authStore.baseToken}`,
+        "Pot-Id": potId
+      },
+    })
   }
 
   async disconnect() {
