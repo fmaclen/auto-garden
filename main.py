@@ -27,6 +27,7 @@ class AutoGarden:
                 # Only run the loop once in tests
                 if TEST_ENV == True: break
 
+                self.device.server_listen() # TODO: make this do something
                 self.device.sleep(TICK_RATE_IN_S)
 
         except KeyboardInterrupt:

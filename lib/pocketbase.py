@@ -143,3 +143,13 @@ class PocketBase:
             raise RuntimeError("-> PocketBase: Invalid credentials", response.status_code)
 
         return response.json()["token"]
+
+    def is_valid_jwt(self, external_jwt: str) -> bool:
+        url = f"{POCKETBASE_SERVER_URL}/api/settings"
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": external_jwt # e.g. `Bearer aaaa.bbbb.cccc`
+        }
+        response = self.get(url, headers=headers)
+
+        return response.status_code == 200
