@@ -1,4 +1,5 @@
 import socket
+from typing import Union
 from datetime import datetime
 from time import sleep, mktime
 from requests import get, post, patch
@@ -34,7 +35,7 @@ class Device:
         print('-> Listening on', addr)
         return s
 
-    def server_listen(self) -> None:
+    def server_listen_pot_irrigation(self) -> Union[None, str]:
         client, _ = self.socket.accept()
         request = client.recv(1024).decode('utf-8')
         headers = self.server_parse_request(request)
@@ -59,8 +60,9 @@ class Device:
                     "Access-Control-Allow-Origin: *"  # Required for CORS
                 ]
                 response = "\r\n".join(response_headers)
-                
                 client.send(response.encode('utf-8'))
+
+                return headers['Pot-Id']
             else:
                 client.send('HTTP/1.1 400 Bad Request\r\n\r\n'.encode('utf-8'))
         else:
