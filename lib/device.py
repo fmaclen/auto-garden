@@ -76,3 +76,6 @@ class Device:
                 key, value = line.split(": ", 1)
                 headers[key] = value
         return headers
+
+    def server_stop(self):
+        self.socket.close()
