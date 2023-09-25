@@ -144,7 +144,7 @@ export default class BodyController extends Controller {
       }
 
       // Apply or remove styling if the pot needs irrigation
-      if (pot.moisture_low > lastestMoisture.level) {
+      if (pot.moisture_low >= lastestMoisture.level) {
         this.potMoistureLevelTargets[index].classList.add("negative");
         irrigationNeeded.push(pot);
       } else {
