@@ -5,6 +5,7 @@ from lib.device import Device
 from lib.device_io import DeviceIO
 from lib.time_math import TimeMath
 
+MOISTURE_BUFFER_SIZE = 30
 
 class Pot:
     def __init__(
@@ -32,7 +33,7 @@ class Pot:
 
         self.moisture_previous: Optional[int] = None
         self.moisture_current: Optional[int] = None
-        self.moisture_buffer: List[Optional[int]] = [None] * 10 # A list to keep the last 10 readings so we can smooth them
+        self.moisture_buffer: List[Optional[int]] = [None] * MOISTURE_BUFFER_SIZE # A list to keep the last 10 readings so we can smooth them
         self.moisture_low = moisture_low # It will only irrigate if the moisture value is avobe this low
         self.moisture_high = moisture_high # It will stop irrigating above this moisture value
         self.moisture_sensor_dry = moisture_sensor_dry # It will only irrigate if the moisture value is avobe this low
