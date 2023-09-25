@@ -36,6 +36,7 @@ export default class BodyController extends Controller {
   }
 
   async update() {
+    const irrigationNeeded = [];
     const pots = await this.getPots();
 
     for (const [index, pot] of pots.items.entries()) {
@@ -141,7 +142,17 @@ export default class BodyController extends Controller {
         // Otherwise, create a new chart
         new Chart(this.potLineChartTargets[index], config);
       }
+
+      if (pot.moisture_low > lastestMoisture.level) {
+        irrigationNeeded.push(pot);
+        this.potMoistureLevelTargets[index].classList.add("negative");
+      } else {
+        this.potMoistureLevelTargets[index].classList.remove("negative");
+      }
     }
+
+    // Update favicon to indicate if irrigation is needed
+    document.head.querySelector("link[rel=icon]").href = irrigationNeeded.length > 0 ? 'images/favicon-caution.png' : 'images/favicon.png'
   }
 
   async setServerConfig() {
