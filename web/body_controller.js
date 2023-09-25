@@ -36,7 +36,7 @@ export default class BodyController extends Controller {
   }
 
   async update() {
-    const irrigationNeeded = [];
+    const irrigationNeeded = []; // Keeps track of any pots that need irrigation
     const pots = await this.getPots();
 
     for (const [index, pot] of pots.items.entries()) {
@@ -143,9 +143,10 @@ export default class BodyController extends Controller {
         new Chart(this.potLineChartTargets[index], config);
       }
 
+      // Apply or remove styling if the pot needs irrigation
       if (pot.moisture_low > lastestMoisture.level) {
-        irrigationNeeded.push(pot);
         this.potMoistureLevelTargets[index].classList.add("negative");
+        irrigationNeeded.push(pot);
       } else {
         this.potMoistureLevelTargets[index].classList.remove("negative");
       }
