@@ -25,10 +25,15 @@ jobs:
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # Don't need to deploy the `web.py` script to CloudFlare Pages.
+      # Instead of adding a CloudFlare wrangler config file to ignore it
+      # we can just remove it from the repo before deploying.
+      - name: Remove `web.py`
+        run: rm ./web/web.py
+
       - name: Deploy to CloudFlare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           command: pages deploy web --project-name auto-garden
-          exclude: web.py
