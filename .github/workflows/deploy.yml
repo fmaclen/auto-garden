@@ -1,0 +1,33 @@
+name: Release app & deploy Web-UI
+
+on:
+  push:
+    branches:
+      - deploy-to-cloudflare
+
+jobs:
+  build_and_deploy:
+    name: Build & deploy
+    permissions:
+      contents: write
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Semantic Release
+        id: release
+        run: |
+          version=$(npx semantic-release --branches main | grep 'Published release' | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy to CloudFlare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          command: pages deploy web --project-name auto-garden
