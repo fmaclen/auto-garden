@@ -3,7 +3,7 @@ name: Release app & deploy Web-UI
 on:
   push:
     branches:
-      - deploy-to-cloudflare
+      - main
 
 jobs:
   build_and_deploy:
@@ -17,13 +17,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # - name: Semantic Release
-      #   id: release
-      #   run: |
-      #     version=$(npx semantic-release --branches main | grep 'Published release' | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
-      #     echo "version=$version" >> "$GITHUB_OUTPUT"
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Semantic Release
+        id: release
+        run: |
+          version=$(npx semantic-release --branches main | grep 'Published release' | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Don't need to deploy the `web.py` script to CloudFlare Pages.
       # Instead of adding a CloudFlare wrangler config file to ignore it
