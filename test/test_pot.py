@@ -46,10 +46,12 @@ class TestPot(unittest.TestCase):
             PUMP_FREQUENCY_IN_S,
             PUMP_RELAY_PIN
         )
+        cls.device = Device(2)
 
     @classmethod
     def tearDownClass(cls):
         testboi.pocketbase_stop()
+        cls.device.server_stop()
 
     def test_init(self):
         pot = self.new_pot()
@@ -272,7 +274,7 @@ class TestPot(unittest.TestCase):
 
     def new_pot(self) -> Pot:
         return Pot(
-            Device(2),
+            self.device,
             self.pot_record["id"],
             self.pot_record["name"],
             self.pot_record["moisture_low"],

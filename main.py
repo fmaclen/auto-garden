@@ -21,7 +21,11 @@ class AutoGarden:
     def loop(self) -> None:
         try:
             while True:
+                # Check manual irrigation requests
+                pot_id_to_irrigate = self.device.server_listen_pot_irrigation()
+
                 for pot in self.pots:
+                    if pot.id == pot_id_to_irrigate: pot.irrigate()
                     pot.update()
 
                 # Only run the loop once in tests

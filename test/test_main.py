@@ -33,11 +33,13 @@ class TestMain(unittest.TestCase):
         mock_handle_system_error.assert_called_once_with("No pots to irrigate")
 
     @patch.object(AutoGarden, "setup_pots")
-    def test_irrigation_loop(self, mock_setup_pots):
+    @patch.object(Device, "server_listen_pot_irrigation", return_value=None)
+    def test_irrigation_loop(self, mock_device_server_listen, mock_setup_pots):
         mock_pot = MagicMock()
         mock_setup_pots.return_value = [mock_pot, mock_pot]
         self.auto_garden = AutoGarden()
         self.assertEqual(mock_pot.update.call_count, 2)
+        mock_device_server_listen.assert_called_once()
 
 
 if __name__ == '__main__':
