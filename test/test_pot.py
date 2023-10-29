@@ -13,7 +13,7 @@ from lib.pot import Pot
 from env import DEVICE
 
 NAME = "Strawberry (Test)"
-MOISTURE_BUFFER_SIZE = 10
+MOISTURE_BUFFER_SIZE = 30
 MOISTURE_LOW = 15
 MOISTURE_HIGH = 80
 MOISTURE_SENSOR_DRY = 60000
@@ -60,7 +60,7 @@ class TestPot(unittest.TestCase):
         self.assertEqual(pot.name, self.pot_record["name"])
         self.assertEqual(pot.moisture_previous, None)
         self.assertEqual(pot.moisture_current, None)
-        self.assertEqual(pot.moisture_buffer, [None]*10)
+        self.assertEqual(pot.moisture_buffer, [None]*MOISTURE_BUFFER_SIZE)
         self.assertEqual(pot.moisture_low, self.pot_record["moisture_low"])
         self.assertEqual(pot.moisture_high, self.pot_record["moisture_high"])
         self.assertEqual(pot.moisture_sensor_dry, self.pot_record["moisture_sensor_dry"])
@@ -88,9 +88,9 @@ class TestPot(unittest.TestCase):
         pot = self.new_pot()
 
         # Reading the moisture 9 more times to fill the buffer
-        for i in range(10):
+        for i in range(MOISTURE_BUFFER_SIZE):
             pot.read_moisture()
-            if (i+1) % 10 == 0:  # checking for change every 10th reading
+            if (i+1) % MOISTURE_BUFFER_SIZE == 0:  # checking for change every 10th reading
                 self.assertEqual(pot.moisture_current, 0)
                 mock_set_moisture.assert_called_once_with(0)
             else:

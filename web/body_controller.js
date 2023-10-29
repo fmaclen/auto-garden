@@ -37,6 +37,8 @@ export default class BodyController extends Controller {
   }
 
   async update() {
+    const irrigationNeeded = []; // Keeps track of any pots that need irrigation
+    const noMoistureReading = []; // Keeps track of any pots that haven't sent a moisture reading in the last 24 hours
     const pots = await this.getPots();
 
     for (const [index, pot] of pots.items.entries()) {
@@ -144,7 +146,33 @@ export default class BodyController extends Controller {
         // Otherwise, create a new chart
         new Chart(this.potLineChartTargets[index], config);
       }
+
+      // Apply or remove styling if the pot needs irrigation
+      if (pot.moisture_low >= lastestMoisture.level) {
+        this.potMoistureLevelTargets[index].classList.add("negative");
+        irrigationNeeded.push(pot);
+      } else {
+        this.potMoistureLevelTargets[index].classList.remove("negative");
+      }
+
+      // If there was no moisture reading in the last 24 hours, apply warning styling
+      // because it's likely the pot is offline.
+      const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
+      const updatedDate = new Date(lastestMoisture.updated);
+
+      if (new Date() - updatedDate > ONE_DAY_IN_MS) {
+        this.potMoistureUpdatedTargets[index].classList.add("warning");
+        this.potMoistureUpdatedTargets[index].classList.remove("secondary");
+        noMoistureReading.push(pot);
+      } else {
+        this.potMoistureUpdatedTargets[index].classList.remove("warning");
+        this.potMoistureUpdatedTargets[index].classList.add("secondary");
+      }
     }
+
+    // Update favicon to indicate if irrigation is needed
+    const shouldDisplayCautionFavicon = irrigationNeeded.length > 0 || noMoistureReading.length > 0;
+    document.head.querySelector("link[rel=icon]").href = shouldDisplayCautionFavicon ? 'images/favicon-caution.png' : 'images/favicon.png'
   }
 
   async setServerConfig() {
