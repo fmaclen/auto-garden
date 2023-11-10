@@ -1,3 +1,5 @@
+_**Deprecation note:** I used this project actively for 3-4 months but I wanted to add new features that were too time consuming to implement so I migrated my system to [Home Assistant](https://www.home-assistant.io)._   
+
 # auto-garden
 
 <p align="center"><img src="https://github.com/fmaclen/auto-garden/assets/1434675/8fc50981-174d-44af-89ae-b72e054ac3e9" width="192"/></p>
